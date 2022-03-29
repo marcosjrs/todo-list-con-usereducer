@@ -1,0 +1,12 @@
+.TodosBasico{
+  margin-top: 15px;
+}
+
+.TodosBasico > h1{
+  margin-bottom: 18px;
+}
+
+.TodosBasico .list-group{
+  margin-top: 15px;
+}
+
