@@ -1,0 +1,4 @@
+.TodoListItem.list-group-item > div{
+  flex: 1;
+  cursor: pointer;
+}

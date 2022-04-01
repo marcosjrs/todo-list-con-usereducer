@@ -1,4 +1,5 @@
-import React, { useEffect, useReducer } from 'react'
+import React, { useCallback, useEffect, useReducer } from 'react'
+import TodoList from '../components/TodoList/TodoList';
 import { useDataForm } from '../hooks/useDataForm';
 import { todoReducer } from '../model/reducer/todoReducer';
 import './TodosBasico.css'
@@ -18,20 +19,25 @@ const TodosBasico = props => {
   const [todos, dispatch] = useReducer(todoReducer, [], init); //mejor esto que usar solo el segundo parametro con el initState
   const [ {texto}, handleInputChange, resetForm ] = useDataForm({texto:''});
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    const nuevaTarea = { id: new Date().getTime(), texto, hecho: false};
-    dispatch({type:'add', payload: nuevaTarea});    
-    resetForm();
-  };
+  const handleSubmit = useCallback( 
+    (evt) => {
+      evt.preventDefault();
+      const nuevaTarea = { id: new Date().getTime(), texto, hecho: false};
+      dispatch({type:'add', payload: nuevaTarea});    
+      resetForm()
+    },
+    [resetForm,texto]
+  );
 
-  const handleDelete = (idTodo) => {
-    dispatch({type:'remove', payload: parseInt(idTodo)});
-  };
+  const handleDelete = useCallback(
+    (idTodo) => dispatch({type:'remove', payload: parseInt(idTodo)}),
+    []
+  );
 
-  const handleClickItem = (todo) => {
-    dispatch({type:'toggle', payload: todo});
-  };
+  const handleClickItem =  useCallback(
+    (todo) => dispatch({type:'toggle', payload: todo}),
+    []
+  );
 
   useEffect(() => {
     //Almacenar en localStorage
@@ -55,14 +61,7 @@ const TodosBasico = props => {
         </form>
       </header>
      
-      <ul className='list-group'>
-        {todos.map( (t, indice) =>
-          <li className='list-group-item d-flex justify-content-between align-items-center' key={t.id}>
-            <div onClick={()=>handleClickItem(t)} className={t.hecho?'text-decoration-line-through':''} >{indice+1}- {t.texto}</div> 
-            <button onClick={()=>handleDelete(t.id)} type="button" className="btn btn-danger"><i className="bi bi-trash"></i></button>
-          </li> 
-        )}
-      </ul>    
+     <TodoList todos={todos} handleClickItem={handleClickItem} handleDelete={handleDelete} />
         
     </div>
   )
