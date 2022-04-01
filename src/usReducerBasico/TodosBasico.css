@@ -10,3 +10,7 @@
   margin-top: 15px;
 }
 
+.TodosBasico .list-group .list-group-item > div{
+  flex: 1;
+  cursor: pointer;
+}

@@ -29,6 +29,10 @@ const TodosBasico = props => {
     dispatch({type:'remove', payload: parseInt(idTodo)});
   };
 
+  const handleClickItem = (todo) => {
+    dispatch({type:'toggle', payload: todo});
+  };
+
   useEffect(() => {
     //Almacenar en localStorage
     localStorage.setItem('todos', JSON.stringify(todos));
@@ -54,7 +58,7 @@ const TodosBasico = props => {
       <ul className='list-group'>
         {todos.map( (t, indice) =>
           <li className='list-group-item d-flex justify-content-between align-items-center' key={t.id}>
-            <div className={t.hecho?'text-decoration-line-through':''} >{indice+1}- {t.texto}</div> 
+            <div onClick={()=>handleClickItem(t)} className={t.hecho?'text-decoration-line-through':''} >{indice+1}- {t.texto}</div> 
             <button onClick={()=>handleDelete(t.id)} type="button" className="btn btn-danger"><i className="bi bi-trash"></i></button>
           </li> 
         )}
